@@ -1,0 +1,104 @@
+plugin.tx_mdnotifications_notifications {
+  view {
+    templateRootPaths.0 = EXT:md_notifications/Resources/Private/Templates/
+    templateRootPaths.1 = {$plugin.tx_mdnotifications_notifications.view.templateRootPath}
+    partialRootPaths.0 = EXT:md_notifications/Resources/Private/Partials/
+    partialRootPaths.1 = {$plugin.tx_mdnotifications_notifications.view.partialRootPath}
+    layoutRootPaths.0 = EXT:md_notifications/Resources/Private/Layouts/
+    layoutRootPaths.1 = {$plugin.tx_mdnotifications_notifications.view.layoutRootPath}
+  }
+
+  persistence {
+    #storagePid = {$plugin.tx_mdnotifications_notifications.persistence.storagePid}
+    #recursive = 1
+  }
+
+  features {
+    #skipDefaultArguments = 1
+    # if set to 1, the enable fields are ignored in BE context
+    ignoreAllEnableFieldsInBe = 0
+  }
+
+  mvc {
+    #callDefaultActionIfActionCantBeResolved = 1
+  }
+
+  settings {
+
+  }
+}
+
+/**
+ * This lib can be used to show the number of selected notification types
+ * Use following code in your fluid template in order to get number of all notifications:
+ * <f:cObject typoscriptObjectPath="lib.mdNotificationsCount" />
+ *
+ * Use this to get number of notifications for `pages`and `tx_news_domain_model_news` records:
+ * <f:cObject typoscriptObjectPath="lib.mdNotificationsCount" data="{recordKeys:'pages,tx_news_domain_model_news'}" />
+ *
+ */
+lib.mdNotificationsCount = USER
+lib.mdNotificationsCount {
+  userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+  extensionName = MdNotifications
+  pluginName = Count
+  vendorName = Mediadreams
+
+  settings < plugin.tx_mdnotifications_notifications
+  settings {
+    useStdWrap := addToList(recordKeys)
+
+    recordKeys = TEXT
+    recordKeys.field = recordKeys
+  }
+}
+
+/**
+ * This lib can be used to show information, if given record was seen already
+ * Use following code in your fluid template
+ * <f:cObject typoscriptObjectPath="lib.mdNotificationsHasSeen" data="{recordKey:'tx_news_domain_model_news', recordUid:'{newsItem.uid}'}" />
+ *
+ */
+lib.mdNotificationsHasSeen = USER
+lib.mdNotificationsHasSeen {
+  userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+  extensionName = MdNotifications
+  pluginName = HasSeen
+  vendorName = Mediadreams
+
+  settings < plugin.tx_mdnotifications_notifications
+  settings {
+    useStdWrap := addToList(recordKey,recordUid)
+
+    recordKey = TEXT
+    recordKey.field = recordKey
+
+    recordUid = TEXT
+    recordUid.field = recordUid
+  }
+}
+
+/**
+ * This lib can be used to remove notification flag for a record
+ * Use the following code in your fluid template for deleting notifications of news records
+ * <f:cObject typoscriptObjectPath="lib.mdNotificationsRemove" data="{recordKey:'tx_news_domain_model_news', recordUid:'{newsItem.uid}'}" />
+ *
+ */
+lib.mdNotificationsRemove = USER
+lib.mdNotificationsRemove {
+  userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+  extensionName = MdNotifications
+  pluginName = Delete
+  vendorName = Mediadreams
+
+  settings < plugin.tx_mdnotifications_notifications
+  settings {
+    useStdWrap := addToList(recordKey,recordUid)
+
+    recordKey = TEXT
+    recordKey.field = recordKey
+
+    recordUid = TEXT
+    recordUid.field = recordUid
+  }
+}

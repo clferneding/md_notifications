@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <sheetTitle>Plugin Options</sheetTitle>
+                <type>array</type>
+                <el>
+                    <settings.recordKeys>
+                        <label>LLL:EXT:md_notifications/Resources/Private/Language/locallang_db.xlf:settings.recordKeys</label>
+                        <description>LLL:EXT:md_notifications/Resources/Private/Language/locallang_db.xlf:settings.recordKeys.description</description>
+                        <config>
+                            <type>input</type>
+                            <size>50</size>
+                            <eval>trim</eval>
+                        </config>
+                    </settings.recordKeys>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>

@@ -1,0 +1,34 @@
+{
+    "name": "mediadreams/md-notifications",
+    "type": "typo3-cms-extension",
+    "description": "Notify frontend users about new data records.",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"typo3",
+		"extension",
+		"notifications"
+	],
+    "authors": [
+        {
+            "name": "Christoph Daecke",
+            "role": "Developer"
+        }
+    ],
+	"support": {
+		"issues": "https://github.com/cdaecke/md_notifications/issues",
+		"source": "https://github.com/cdaecke/md_notifications"
+	},
+    "require": {
+        "typo3/cms-core": "^12.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mediadreams\\MdNotifications\\": "Classes"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "md_notifications"
+        }
+    }
+}

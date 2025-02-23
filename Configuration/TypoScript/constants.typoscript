@@ -1,0 +1,15 @@
+plugin.tx_mdnotifications_notifications {
+  view {
+    # cat=plugin.tx_mdnotifications_notifications/file; type=string; label=Path to template root (FE)
+    templateRootPath = EXT:md_notifications/Resources/Private/Templates/
+    # cat=plugin.tx_mdnotifications_notifications/file; type=string; label=Path to template partials (FE)
+    partialRootPath = EXT:md_notifications/Resources/Private/Partials/
+    # cat=plugin.tx_mdnotifications_notifications/file; type=string; label=Path to template layouts (FE)
+    layoutRootPath = EXT:md_notifications/Resources/Private/Layouts/
+  }
+
+  persistence {
+    # cat=plugin.tx_mdnotifications_notifications//a; type=string; label=Default storage PID
+    storagePid =
+  }
+}

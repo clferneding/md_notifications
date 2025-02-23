@@ -1,0 +1,14 @@
+mod.wizards.newContentElement.wizardItems.plugins {
+  elements {
+    mdnotifications_notifications {
+      iconIdentifier = tx_mdnotifications_notifications
+      title = LLL:EXT:md_notifications/Resources/Private/Language/locallang_db.xlf:mdnotifications_notifications.name
+      description = LLL:EXT:md_notifications/Resources/Private/Language/locallang_db.xlf:mdnotifications_notifications.description
+      tt_content_defValues {
+        CType = mdnotifications_notifications
+      }
+    }
+  }
+
+  show := addToList(mdnotifications_notifications)
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:md_notifications/Resources/Private/Language/locallang_db.xlf" date="2025-01-15T18:22:55Z" product-name="md_notifications">
+		<header/>
+		<body>
+			<trans-unit id="tx_mdnotifications_domain_model_notification" resname="tx_mdnotifications_domain_model_notification">
+				<source>Notification</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.description" resname="tx_mdnotifications_domain_model_notification.description">
+				<source>Notification</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.record_key" resname="tx_mdnotifications_domain_model_notification.record_key">
+				<source>Record key</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.record_key.description" resname="tx_mdnotifications_domain_model_notification.record_key.description">
+				<source>The key of the data record (table name).</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.record_id" resname="tx_mdnotifications_domain_model_notification.record_id">
+				<source>Record Id</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.record_id.description" resname="tx_mdnotifications_domain_model_notification.record_id.description">
+				<source>The Id of the data record.</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.feuser" resname="tx_mdnotifications_domain_model_notification.feuser">
+				<source>Feuser</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.feuser.description" resname="tx_mdnotifications_domain_model_notification.feuser.description">
+				<source>The Id of the frontend user.</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.record_date" resname="tx_mdnotifications_domain_model_notification.record_date">
+				<source>Record Date</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.record_date.description" resname="tx_mdnotifications_domain_model_notification.record_date.description">
+				<source>The creation date of the data record.</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.data" resname="tx_mdnotifications_domain_model_notification.data">
+				<source>Data</source>
+			</trans-unit>
+			<trans-unit id="tx_mdnotifications_domain_model_notification.data.description" resname="tx_mdnotifications_domain_model_notification.data.description">
+				<source>A JSON representation of the data of the record.</source>
+			</trans-unit>
+			<trans-unit id="mdnotifications_notifications.name" resname="mdnotifications_notifications.name">
+				<source>Notifications</source>
+			</trans-unit>
+			<trans-unit id="mdnotifications_notifications.description" resname="mdnotifications_notifications.description">
+				<source>Show list of notifications for a frontend user.</source>
+			</trans-unit>
+
+			<trans-unit id="settings.recordKeys" resname="settings.recordKeys">
+				<source>Record keys</source>
+			</trans-unit>
+			<trans-unit id="settings.recordKeys.description" resname="settings.recordKeys.description">
+				<source>Comma separated list of record keys (table names). Leave empty, if all records shall be shown.</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

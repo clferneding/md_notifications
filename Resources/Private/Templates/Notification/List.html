@@ -1,0 +1,21 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+<f:section name="content">
+    <f:for each="{notifications}" as="notification">
+        <f:render section="{notification.recordKey}" arguments="{_all}" />
+    </f:for>
+</f:section>
+
+<f:section name="pages">
+    <f:link.page pageUid="{notification.recordId}">
+        {notification.recordDate -> f:format.date(format: 'd.m.Y')}, {notification.dataArr.title}<br>
+    </f:link.page>
+</f:section>
+
+<f:section name="tx_news_domain_model_news">
+    <f:link.action pageUid="" action="detail" pluginName="pi1" extensionName="news" controller="News" arguments="{news:'{notification.recordId}'}">
+    {notification.recordDate -> f:format.date(format: 'd.m.Y')}, {notification.dataArr.title} ({notification.recordKey}: {notification.recordId})<br>
+    </f:link.action>
+</f:section>
+</html>
