@@ -52,9 +52,9 @@ abstract class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\Acti
             $typoScriptArray = $typoScriptService->convertPlainArrayToTypoScriptArray($this->settings);
             $stdWrapProperties = GeneralUtility::trimExplode(',', $this->settings['useStdWrap'], true);
             foreach ($stdWrapProperties as $key) {
-                if (is_array($typoScriptArray[$key . '.'])) {
-                    $this->settings[$key] = $this->configurationManager->getContentObject()->stdWrap(
-                        $typoScriptArray[$key],
+                if (is_array($typoScriptArray[$key . '.'] ?? null)) {
+                    $this->settings[$key] = $this->request->getAttribute('currentContentObject')->stdWrap(
+                        $typoScriptArray[$key] ?? '',
                         $typoScriptArray[$key . '.']
                     );
                 }
