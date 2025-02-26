@@ -218,9 +218,13 @@ class TCEmainHook
      */
     protected function getSiteConfig(int $storageId): array
     {
-        $siteFinder = GeneralUtility::makeInstance(SiteFinder:: class);
-        $site = $siteFinder->getSiteByPageId($storageId);
-        return $site->getConfiguration();
+        if ($storageId > 0) {
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder:: class);
+            $site = $siteFinder->getSiteByPageId($storageId);
+            return $site->getConfiguration();
+        }
+
+        return [];
     }
 
     /**
