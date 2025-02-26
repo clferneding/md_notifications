@@ -33,7 +33,7 @@ class NotificationController extends AbstractController
         if ($this->feuserUid !== null) {
             $notifications = $this->notificationRepository->getList(
                 $this->feuserUid,
-                $this->settings['recordKeys'] ?? null,
+                $this->settings['recordKeys'] ?? '',
             );
 
             $this->view->assign('notifications', $notifications);

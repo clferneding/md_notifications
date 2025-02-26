@@ -45,15 +45,16 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      *
      *
      * @param int $feuserUid
-     * @param string|null $recordKeys Comma separated string of table names, eg. `pages, tx_news_domain_model_news`
+     * @param string $recordKeys Comma separated string of table names, eg. `pages, tx_news_domain_model_news`
      * @return QueryResult
      */
-    public function getList(int $feuserUid, string $recordKeys = null): QueryResult
+    public function getList(int $feuserUid, string $recordKeys = ''): QueryResult
     {
+        $recordKeys = trim($recordKeys);
         $query = $this->createQuery();
         $constraints[] = $query->equals('feuser', $feuserUid);
 
-        if ($recordKeys !== null) {
+        if (!empty($recordKeys)) {
             $types = explode(',', $recordKeys);
 
             $orStatements = [];
