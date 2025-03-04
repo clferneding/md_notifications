@@ -43,6 +43,9 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         @import \'EXT:md_notifications/Configuration/TSconfig/ContentElementWizard.tsconfig\'
     ');
 
+    // Add path for email template
+    $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][2025] = 'EXT:md_notifications/Resources/Private/Templates/Email';
+
     // Hook into saving process of records
     $GLOBALS['TYPO3_CONF_VARS']
             ['SC_OPTIONS']

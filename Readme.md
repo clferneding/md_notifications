@@ -100,6 +100,38 @@ Example for a news record:
 
     <f:cObject typoscriptObjectPath="lib.mdNotificationsRemove" data="{recordKey:'tx_news_domain_model_news', recordUid:'{newsItem.uid}'}" />
 
+### Console command
+You can send reminder emails about notifications, which are not seen yet.
+Therefor you will find a scheduler task called `mdNotifications:reminder`.
+
+Setup scheduler task:
+
+* Go to `Scheduler`
+* Click `New task`
+* Select `Execute console commands` in the `Task`-dropdown
+* Select `mdNotifications:reminder` in the dropdown `Schedulable Command`
+* Add a value in the field `Frequency`
+* Press the `Save` button
+* Add value for `storages`. This is a comma separated list of IDs where the
+  notification data is stored.
+* Add value for `listPageUid`. This is the Uid of the page, which holds the list
+  of notification items. This page will be linked in the email.
+* Add value for `mailSubject`. The is the subject of the email, which will be sent.
+* Add optional value `mailTemplate`. With this option, your are able to set
+  a templates for the task. Enter the name of the HTML file, which shall be
+  used for the e-mail.
+* Press the Save button again
+
+Hint:<br>
+You can setup individual tasks for individual notification types. Therefor
+add more the one `mdNotifications:reminder`-tasks and configure individually.
+
+#### E-Mail template
+In order to change the E-Mail template, add the path to your site extension in
+global configuration in the section `[MAIL][templateRootPaths]`. As soon, as you have added
+the path to your extension, you can copy the `Notifications.html` template from
+`Resources/Private/Templates/Email/` to your path and do your modifications.
+
 ## Bugs and Known Issues
 If you find a bug, it would be nice if you add an issue on
 [Github](https://github.com/cdaecke/md_notifications/issues).

@@ -15,12 +15,12 @@ namespace Mediadreams\MdNotifications\Domain\Repository;
  * (c) 2025 Christoph Daecke <typo3@mediadreams.org>
  */
 
+use Doctrine\DBAL\ArrayParameterType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\expr;
 
 /**
  * The repository for Notifications
@@ -50,16 +50,15 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getList(int $feuserUid, string $recordKeys = ''): QueryResult
     {
-        $recordKeys = trim($recordKeys);
         $query = $this->createQuery();
         $constraints[] = $query->equals('feuser', $feuserUid);
 
         if (!empty($recordKeys)) {
-            $types = explode(',', $recordKeys);
+            $types = GeneralUtility::trimExplode(',', $recordKeys);
 
             $orStatements = [];
             foreach ($types as $type) {
-                $orStatements[] = $query->equals('record_key', trim($type));
+                $orStatements[] = $query->equals('record_key', $type);
             }
 
             if (count($orStatements) > 0) {
@@ -86,8 +85,8 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function hasSeen(string $recordKey, int $recordUid, int $feuserUid): int
     {
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable(static::TABLE_NAME);
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable(static::TABLE_NAME);
 
         $queryBuilder = $queryBuilder
             ->count('uid')
@@ -120,8 +119,8 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function countItems(int $feuserUid, string $recordKeys = null): int
     {
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable(static::TABLE_NAME);
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable(static::TABLE_NAME);
 
         $queryBuilder = $queryBuilder
             ->count('uid')
@@ -134,13 +133,13 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             );
 
         if ($recordKeys !== null) {
-            $types = explode(',', $recordKeys);
+            $types = GeneralUtility::trimExplode(',', $recordKeys);
 
             $orStatements = [];
             foreach ($types as $type) {
                 $orStatements[] = $queryBuilder->expr()->eq(
                     'record_key',
-                    $queryBuilder->createNamedParameter(trim($type), Connection::PARAM_STR)
+                    $queryBuilder->createNamedParameter($type, Connection::PARAM_STR)
                 );
             }
 
@@ -162,7 +161,7 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function deleteEntry(string $recordKey, int $recordUid, int $feuserUid): void
     {
-        $databaseConnection = GeneralUtility::makeInstance(ConnectionPool::class)
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable(static::TABLE_NAME);
 
         $arrayWhere = [
@@ -171,6 +170,41 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             'feuser' => $feuserUid,
         ];
 
-        $databaseConnection->delete(static::TABLE_NAME, $arrayWhere);
+        $queryBuilder->delete(static::TABLE_NAME, $arrayWhere);
+    }
+
+    /**
+     * Get all users which have notifications in selected Storage Pids.
+     * Number of notifications is added in field `notificationItems`
+     *
+     * @param array $storageIds Comma separated list of storage Ids
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function getUsersWithNotifications(array $storageIds): array
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable(static::TABLE_NAME);
+
+        $queryBuilder = $queryBuilder->addSelectLiteral('COUNT(notifications.uid) AS notificationItems', 'u.*')
+            ->from(static::TABLE_NAME, 'notifications')
+            ->leftJoin(
+                'notifications',
+                'fe_users',
+                'u',
+                $queryBuilder->expr()->eq('u.uid', 'notifications.feuser')
+            )
+            ->where(
+                $queryBuilder->expr()->in(
+                    'notifications.pid',
+                    $queryBuilder->createNamedParameter($storageIds, ArrayParameterType::INTEGER)
+                )
+            )
+            ->groupBy('notifications.feuser');
+
+        $result = $queryBuilder->executeQuery()
+            ->fetchAllAssociative();
+
+        return $result;
     }
 }
