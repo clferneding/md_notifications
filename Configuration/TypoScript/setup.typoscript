@@ -44,7 +44,8 @@ lib.mdNotificationsCount {
   pluginName = Count
   vendorName = Mediadreams
 
-  settings < plugin.tx_mdnotifications_notifications
+  view < plugin.tx_mdnotifications_notifications.view
+  settings < plugin.tx_mdnotifications_notifications.settings
   settings {
     useStdWrap := addToList(recordKeys)
 
@@ -66,7 +67,8 @@ lib.mdNotificationsHasSeen {
   pluginName = HasSeen
   vendorName = Mediadreams
 
-  settings < plugin.tx_mdnotifications_notifications
+  view < plugin.tx_mdnotifications_notifications.view
+  settings < plugin.tx_mdnotifications_notifications.settings
   settings {
     useStdWrap := addToList(recordKey,recordUid)
 
@@ -91,7 +93,8 @@ lib.mdNotificationsRemove {
   pluginName = Delete
   vendorName = Mediadreams
 
-  settings < plugin.tx_mdnotifications_notifications
+  view < plugin.tx_mdnotifications_notifications.view
+  settings < plugin.tx_mdnotifications_notifications.settings
   settings {
     useStdWrap := addToList(recordKey,recordUid)
 
