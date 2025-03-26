@@ -65,8 +65,9 @@ class TCEmainHook
             }
         } else if ($action == 'update') {
             // TODO: Check, if there is another way, to get the `pid` of the record
-            $siteConfig = $this->getSiteConfig($pObj->checkValue_currentRecord['pid']);
-            if ($this->inCharge($siteConfig, $pObj->checkValue_currentRecord['pid'], $table)) {
+            $pid = (int)$pObj->checkValue_currentRecord['pid'];
+            $siteConfig = $this->getSiteConfig($pid);
+            if ($this->inCharge($siteConfig, $pid, $table)) {
                 $this->updateNotificationInfo($recordUid, $table, $fieldArray);
             }
         }
