@@ -1,0 +1,39 @@
+<f:if condition="{pagination.displayRangeStart} != {pagination.displayRangeEnd}">
+    <nav class="mt-5" aria-label="Navigation for notification items">
+        <ul class="pagination justify-content-center">
+            <f:if condition="{pagination.displayRangeStart} > 1">
+                <li class="page-item first">
+                    <f:link.page class="page-link" additionalAttributes="{aria-label:'{f:translate(key:\'pagination.first\')}'}">
+                        {f:translate(key: 'pagination.first')}
+                    </f:link.page>
+                </li>
+                <li class="page-item previous">
+                    <f:link.action arguments="{currentPageNumber:pagination.previousPageNumber}" class="page-link" additionalAttributes="{aria-label:'{f:translate(key:\'pagination.prevLabel\')}'}">
+                        <span aria-hidden="true">{f:translate(key: 'pagination.prev') -> f:format.raw()}</span>
+                    </f:link.action>
+                </li>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            </f:if>
+
+            <f:for each="{pagination.allPageNumbers}" as="page">
+                <li class="page-item {f:if(condition:'{currentPageNumber}=={page}',then:'active')}" {f:if(condition:'{currentPageNumber}=={page}',then:'aria-current="page"')}>
+                    <f:link.action arguments="{currentPageNumber:page}" class="page-link">{page}</f:link.action>
+                </li>
+            </f:for>
+
+            <f:if condition="{pagination.displayRangeEnd} < {paginator.numberOfPages}">
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+                <li class="page-item next">
+                    <f:link.action arguments="{currentPageNumber:pagination.nextPageNumber}" class="page-link" additionalAttributes="{aria-label:'{f:translate(key:\'pagination.nextLabel\')}'}">
+                        <span aria-hidden="true">{f:translate(key: 'pagination.next') -> f:format.raw()}</span>
+                    </f:link.action>
+                </li>
+                <li class="page-item last">
+                    <f:link.action arguments="{currentPageNumber:pagination.lastPageNumber}" class="page-link" additionalAttributes="{aria-label:'{f:translate(key:\'pagination.last\')}'}">
+                        {f:translate(key: 'pagination.last')}
+                    </f:link.action>
+                </li>
+            </f:if>
+        </ul>
+    </nav>
+</f:if>

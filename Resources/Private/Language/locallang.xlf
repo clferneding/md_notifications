@@ -12,6 +12,25 @@
 			<trans-unit id="template.unread">
 				<source>Unread</source>
 			</trans-unit>
+
+			<trans-unit id="pagination.first">
+				<source>First page</source>
+			</trans-unit>
+			<trans-unit id="pagination.prev">
+				<source><![CDATA[&laquo;]]></source>
+			</trans-unit>
+			<trans-unit id="pagination.prevLabel">
+				<source>Previous page</source>
+			</trans-unit>
+			<trans-unit id="pagination.next">
+				<source><![CDATA[&raquo;]]></source>
+			</trans-unit>
+			<trans-unit id="pagination.nextLabel">
+				<source>Next page</source>
+			</trans-unit>
+			<trans-unit id="pagination.last">
+				<source>Last page</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

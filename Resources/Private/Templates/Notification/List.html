@@ -5,6 +5,8 @@
     <f:for each="{notifications}" as="notification">
         <f:render section="{notification.recordKey}" arguments="{_all}" />
     </f:for>
+
+    <f:render partial="Pagination" arguments="{_all}" />
 </f:section>
 
 <f:section name="pages">

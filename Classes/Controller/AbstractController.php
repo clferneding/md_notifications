@@ -16,8 +16,11 @@ namespace Mediadreams\MdNotifications\Controller;
  */
 
 use Mediadreams\MdNotifications\Domain\Repository\NotificationRepository;
+use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 
 /**
  * Class AbstractController
@@ -62,5 +65,38 @@ abstract class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\Acti
         }
 
         $this->feuserUid = $this->request->getAttribute('frontend.user')->user['uid'] ?? null;
+    }
+
+    /**
+     * Get paginated items and paginator for query result
+     *
+     * @param QueryResult $items
+     * @return array
+     */
+    protected function getPaginatedItems(QueryResult $items): array
+    {
+        $currentPage = $this->request->hasArgument('currentPageNumber')
+            ? (int)$this->request->getArgument('currentPageNumber')
+            : 1;
+
+        $itemsPerPage = isset($this->settings['pagination']['itemsPerPage'])? (int)$this->settings['pagination']['itemsPerPage'] : 10;
+        $maxNumPages = isset($this->settings['pagination']['maxNumPages'])? (int)$this->settings['pagination']['maxNumPages'] : 5;
+
+        $paginator = new QueryResultPaginator(
+            $items,
+            $currentPage,
+            $itemsPerPage,
+        );
+        $pagination = new SlidingWindowPagination(
+            $paginator,
+            $maxNumPages,
+        );
+
+        return [
+            'notifications' => $pagination->getPaginator()->getPaginatedItems(),
+            'pagination' => $pagination,
+            'paginator' => $paginator,
+            'currentPageNumber' => $paginator->getCurrentPageNumber(),
+        ];
     }
 }

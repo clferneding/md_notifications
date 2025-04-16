@@ -24,7 +24,10 @@ plugin.tx_mdnotifications_notifications {
   }
 
   settings {
-
+    pagination {
+      itemsPerPage = 10
+      maxNumPages = 5
+    }
   }
 }
 

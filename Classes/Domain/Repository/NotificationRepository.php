@@ -76,7 +76,7 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * Indicates. whether the user has seen the given item
+     * Indicates whether the user has seen the given item
      *
      * @param string $recordKey The record key (table name)
      * @param int $recordUid Uid of the record

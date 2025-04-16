@@ -36,7 +36,7 @@ class NotificationController extends AbstractController
                 $this->settings['recordKeys'] ?? '',
             );
 
-            $this->view->assign('notifications', $notifications);
+            $this->view->assignMultiple($this->getPaginatedItems($notifications));
 
             if (!empty($this->settings['recordKeys'])) {
                 $this->view->assign('recordKeys', explode(',', $this->settings['recordKeys']));
