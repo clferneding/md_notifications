@@ -42,7 +42,7 @@ abstract class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\Acti
     /**
      * Initialize actions
      */
-    protected function initializeAction()
+    protected function initializeAction(): void
     {
         // Use stdWrap for given defined settings
         // Thanks to Georg Ringer:

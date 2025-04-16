@@ -6,7 +6,7 @@ record type or for all record types together.
 
 ## Requirements
 
-- TYPO3 v12.4
+- TYPO3 v12.4 || v13.4
 
 ## Screenshots
 

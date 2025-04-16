@@ -19,10 +19,10 @@ use TYPO3\CMS\Scheduler\Task\TableGarbageCollectionTask;
             'MdNotifications',
             $plugin,
             [
-                NotificationController::class => strtolower($plugin)
+                NotificationController::class => lcfirst($plugin)
             ],
             [
-                NotificationController::class => strtolower($plugin)
+                NotificationController::class => lcfirst($plugin)
             ],
             ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
         );

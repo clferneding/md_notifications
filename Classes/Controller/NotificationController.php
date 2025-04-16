@@ -53,7 +53,7 @@ class NotificationController extends AbstractController
      *
      * @return ResponseInterface
      */
-    public function CountAction(): ResponseInterface
+    public function countAction(): ResponseInterface
     {
         if ($this->feuserUid !== null) {
             $notifications = $this->notificationRepository->countItems(
@@ -81,7 +81,7 @@ class NotificationController extends AbstractController
         if ($this->feuserUid !== null) {
             $hasSeen = $this->notificationRepository->hasSeen(
                 $this->settings['recordKey'],
-                $this->settings['recordUid'],
+                (int)$this->settings['recordUid'],
                 $this->feuserUid
             );
 
@@ -103,7 +103,7 @@ class NotificationController extends AbstractController
         ) {
             $this->notificationRepository->deleteEntry(
                 $this->settings['recordKey'],
-                $this->settings['recordUid'],
+                (int)$this->settings['recordUid'],
                 $this->feuserUid
             );
         }

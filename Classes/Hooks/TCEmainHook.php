@@ -16,11 +16,13 @@ namespace Mediadreams\MdNotifications\Hooks;
  */
 
 use Mediadreams\MdNotifications\Utility\RootlineUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -39,8 +41,7 @@ class TCEmainHook
      * @param string $recordUid Temporary id of the record, eg `NEW67b5f96849921638839656`
      * @param array $fieldArray The data array, which holds all information on the record
      * @param DataHandler $pObj Parent Object
-     * @throws \TYPO3\CMS\Core\Exception
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Core\Exception|\Doctrine\DBAL\Exception
      */
     public function processDatamap_afterDatabaseOperations(
         string $action,
@@ -134,7 +135,7 @@ class TCEmainHook
             $feuserData = $feuserData->where(
                 $queryBuilderFeusers->expr()->inSet(
                     'usergroup',
-                    $queryBuilderFeusers->createNamedParameter($siteConfig['md_notifications']['feGroup'], \PDO::PARAM_INT)
+                    $queryBuilderFeusers->createNamedParameter($siteConfig['md_notifications']['feGroup'], Connection::PARAM_INT)
                 )
             );
         }
@@ -259,7 +260,7 @@ class TCEmainHook
             FlashMessage::class,
             $message,
             'EXT:md_notifications',
-            \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::WARNING,
+            ContextualFeedbackSeverity::WARNING,
             true
         );
 
