@@ -3,7 +3,7 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Notifications',
     'description' => 'Notify frontend users about new data records.',
-    'category' => '',
+    'category' => 'fe',
     'author' => 'Christoph Daecke',
     'author_email' => 'typo3@mediadreams.org',
     'state' => 'stable',
