@@ -1,20 +1,26 @@
 # TYPO3 Extension `md_notifications`
+This extension adds notifications to configured record types for frontend users.
+In a list, a frontend user can see, whether or not an item was read by
+himself. Additional it is possible to show the number of notifications for each
+record type or for all record types together.
 
 ## Requirements
 
-- TYPO3 >= 12.4
+- TYPO3 v12.4
 
 ## Screenshots
 
+![Screenshot list](./Documentation/Images/list_view.png?raw=true "List view")
+
 ## Installation
-- Install the extension by using composer (`composer req mediadreams/md-notifications`) or using the extension manager
+- Install the extension by using composer (`composer req mediadreams/md-notifications`) or use the extension manager
 - Include the static TypoScript of the extension
 - Configure the extension (see chapter [Configuration](#configuration))
 
 ## Configuration
 Configuration is done in the sites configuration file. Either add the configuration
-directly in `config/sites/site-itentifier/config.yaml`, or import a YAML file
-by using this command:
+directly in `config/sites/{site-itentifier}/config.yaml`, or import a YAML file
+in your site configuration by using this command:
 
 ```
 imports:
@@ -54,14 +60,14 @@ You can use environment variables in the site configuration like this:
 As soon as you have installed and activated the extension, it will hook into
 the saving process of records. Everytime a backend user adds a
 configured record, the unread info for this record and the configured
-feUsers will be added.
+`feUsers` will be added.
 
 ### List plugin
 The extension ships a content element `Notifications`, which shows a list of all
 notifications for the logged in user. In the `Plugin`-tab you have the following
 configuration options:
 
-- `Record keys`<br>Comma separated list of record keys (table names). Leave empty, if all records shall be shown.
+- `Record keys`<br>Comma separated list of record keys (table names). Leave empty, if all records shall be shown.<br>Example: `pages, tx_news_domain_model_news`
 - `Startingpoint`<br>The page on which the notification records are stored.
 
 ### Notification counter
@@ -80,11 +86,11 @@ and `tx_news_domain_model_news` records:
 Use the following code in the fluid template to show, whether the current
 logged in feUser has read the item.
 
-Example for a page record:
+Example for a `page`-record:
 
     <f:cObject typoscriptObjectPath="lib.mdNotificationsHasSeen" data="{recordKey:'pages', recordUid:'{data.uid}'}" />
 
-Example for a news record:
+Example for a `news`-record:
 
     <f:cObject typoscriptObjectPath="lib.mdNotificationsHasSeen" data="{recordKey:'tx_news_domain_model_news', recordUid:'{newsItem.uid}'}" />
 
@@ -92,15 +98,15 @@ Example for a news record:
 Remove the notification info as soon, as the user has read the item. Use
 the following code in your fluid template.
 
-Example for a page record:
+Example for a `page`-record:
 
     <f:cObject typoscriptObjectPath="lib.mdNotificationsRemove" data="{recordKey:'pages', recordUid:'{data.uid}'}" />
 
-Example for a news record:
+Example for a `news`-record:
 
     <f:cObject typoscriptObjectPath="lib.mdNotificationsRemove" data="{recordKey:'tx_news_domain_model_news', recordUid:'{newsItem.uid}'}" />
 
-### Console command
+### Send reminder emails
 You can send reminder emails about notifications, which are not seen yet.
 Therefor you will find a scheduler task called `mdNotifications:reminder`.
 
@@ -124,7 +130,7 @@ Setup scheduler task:
 
 Hint:<br>
 You can setup individual tasks for individual notification types. Therefor
-add more the one `mdNotifications:reminder`-tasks and configure individually.
+add more than one `mdNotifications:reminder`-tasks and configure individually.
 
 #### E-Mail template
 In order to change the E-Mail template, add the path to your site extension in
@@ -132,12 +138,26 @@ global configuration in the section `[MAIL][templateRootPaths]`. As soon, as you
 the path to your extension, you can copy the `Notifications.html` template from
 `Resources/Private/Templates/Email/` to your path and do your modifications.
 
+### Remove items
+If you wish to remove unread items, which are older than a certain time, you
+can use the following scheduler task:
+
+* Go to `Scheduler`
+* Click `New task`
+* Select `Table garbage collection` in the `Task`-dropdown
+* Select `tx_mdnotifications_domain_model_notification` from `Table to clean up`-dropdown
+* Set a value in field `Delete entries older than given number of days`
+* Add a value in the field `Frequency`
+* Press the `Save` button
+
 ## Bugs and Known Issues
 If you find a bug, it would be nice if you add an issue on
 [Github](https://github.com/cdaecke/md_notifications/issues).
 
 # THANKS
 Thanks a lot to all who make this outstanding TYPO3 project possible!
+
+The TYPO3 project - inspiring people to share!
 
 ## Credits
 - Extension icon was kindly taken from [Font Awesome](https://fontawesome.com/icons/bell?f=classic&s=solid).
