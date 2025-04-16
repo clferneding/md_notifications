@@ -5,6 +5,7 @@ defined('TYPO3') || die();
 use Mediadreams\MdNotifications\Controller\NotificationController;
 use Mediadreams\MdNotifications\Hooks\TCEmainHook;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+use TYPO3\CMS\Scheduler\Task\TableGarbageCollectionTask;
 
 (static function() {
     $plugins = [
@@ -59,4 +60,14 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
             ['t3lib/class.t3lib_tcemain.php']
             ['processCmdmapClass']
             ['md_notifications'] = TCEmainHook::class;
+
+    // Add `Table garbage collection task` for notification records
+    $GLOBALS['TYPO3_CONF_VARS']
+            ['SC_OPTIONS']
+            ['scheduler']
+            ['tasks']
+            [TableGarbageCollectionTask::class]
+            ['options']
+            ['tables']
+            ['tx_mdnotifications_domain_model_notification'] = ['dateField' => 'tstamp', 'expirePeriod' => '30'];
 })();
