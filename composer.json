@@ -1,7 +1,7 @@
 {
     "name": "mediadreams/md-notifications",
     "type": "typo3-cms-extension",
-    "description": "Notify frontend users about new data records.",
+    "description": "Notify frontend users about the creation of new data records. Every data type can be configured easily, for example pages (blog posts) or tx_news records.",
 	"license": "GPL-2.0-or-later",
 	"keywords": [
 		"typo3",
