@@ -156,7 +156,7 @@ class TCEmainHook
                     'record_id'     => $recordUid,
                     'record_date'   => $timestamp,
                     'feuser'        => $data['uid'],
-                    'data'          => json_encode($fieldArray),
+                    'data'          => $this->jsonEncode($fieldArray),
                     'tstamp'        => $timestamp,
                     'crdate'        => $timestamp,
                     'hidden'        => $fieldArray['hidden'],
@@ -181,16 +181,41 @@ class TCEmainHook
      *
      * @param string $recordId Id of record
      * @param string $recordKey Key of record (table name)
-     * @param array $fieldArray Data of news entry
+     * @param array $fieldArray Modified data of the record
      * @return void
      */
     protected function updateNotificationInfo(string $recordId, string $recordKey, array $fieldArray)
     {
-        // TODO: Update `data` as well?!
-        $databaseConnection = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('tx_mdnotifications_domain_model_notification');
+        // Get record data in order to update it
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($recordKey);
+        $queryBuilder->getRestrictions()
+            ->removeAll();
 
-        $arrayUpdateData = ['tstamp' => time()];
+        $recordData = $queryBuilder
+            ->select('*')
+            ->from($recordKey)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter((int)$recordId, Connection::PARAM_INT)
+                )
+            )
+            ->executeQuery()
+            ->fetchAssociative();
+
+        foreach ($fieldArray as $key => $value) {
+            if (isset($recordData[$key])) {
+                // Set changed values in field `data`
+                $recordData[$key] = $value;
+            }
+        }
+
+        // Prepare data for update
+        $arrayUpdateData = [
+            'tstamp' => time(),
+            'data' => $this->jsonEncode($recordData),
+        ];
 
         if (isset($fieldArray['hidden'])) {
             $arrayUpdateData = array_merge($arrayUpdateData, ['hidden' => $fieldArray['hidden']]);
@@ -204,6 +229,7 @@ class TCEmainHook
             $arrayUpdateData = array_merge($arrayUpdateData, ['endtime' => $fieldArray['endtime']]);
         }
 
+        $databaseConnection = $connectionPool->getConnectionForTable('tx_mdnotifications_domain_model_notification');
         $databaseConnection->update(
             'tx_mdnotifications_domain_model_notification',
             $arrayUpdateData,
@@ -269,5 +295,16 @@ class TCEmainHook
         /** @var \TYPO3\CMS\Core\Messaging\FlashMessageQueue $defaultFlashMessageQueue */
         $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
         $defaultFlashMessageQueue->enqueue($flashMessage);
+    }
+
+    /**
+     * Get a formatted JSON representation of a value
+     *
+     * @param mixed $value
+     * @return string|false
+     */
+    protected function jsonEncode(mixed $value): string|false
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
 }
