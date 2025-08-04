@@ -218,13 +218,14 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function getUserNotifications(int $feuserUid): array
     {
+        $resultArray = [];
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(static::TABLE_NAME);
 
         $andWhere = [
             $queryBuilder->expr()->eq('feuser', $queryBuilder->createNamedParameter($feuserUid, Connection::PARAM_INT))
         ];
-        $queryBuilder = $queryBuilder->select('record_key','record_id','record_date')
+        $queryBuilder = $queryBuilder->select('record_key','record_id','record_date','data')
             ->from(static::TABLE_NAME, 'notifications')
             ->innerJoin(
                 'notifications',
@@ -235,10 +236,23 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             ->where (
                 $queryBuilder->expr()->eq('notifications.feuser', $queryBuilder->createNamedParameter($feuserUid, Connection::PARAM_INT))
         );
-
         $result = $queryBuilder->executeQuery()
             ->fetchAllAssociative();
 
-        return $result;
+        //mit slug/path-segment und title anreichern
+        foreach ($result as $r) {
+            $arrData = json_decode($r['data'], true);
+            $resultArray[] = [
+                'record_key'    => $r['record_key'],
+                'record_id'     => $r['record_id'],
+                'record_date'   => $r['record_date'],
+                'feuser'        => $feuserUid,
+                'title'         => isset($arrData['title']) ? $arrData['title'] : $r['record_id'],
+                'slug'          => isset($arrData['slug']) ? $arrData['slug'] : $r['record_id'],
+                'path_segment'  => isset($arrData['path_segment']) ? $arrData['path_segment'] : $r['record_id']
+            ];
+        }
+
+        return $resultArray;
     }
 }
