@@ -67,14 +67,16 @@ class ReminderCommand extends Command
         $storageArr = GeneralUtility::intExplode(',', $storageIds);
         $users = $this->notificationRepository->getUsersWithNotifications($storageArr);
         $listPageUri = $this->getPageUri((int)$input->getArgument('listPageUid'));
-
         foreach ($users as $user) {
-            MailService::sendMail(
-                $user['email'],
-                $input->getArgument('mailSubject'),
-                array_merge($user, ['listPageUri' => $listPageUri]),
-                !empty($input->getArgument('mailTemplate'))? $input->getArgument('mailTemplate'):'Notifications'
-            );
+            if ($user['email']<>'') {
+                $notifications = $this->notificationRepository->getUserNotifications($user['uid'], '1');
+                MailService::sendMail(
+                    $user['email'],
+                    $input->getArgument('mailSubject'),
+                    array_merge($user, ['listPageUri' => $listPageUri], ['notifications' => $notifications]),
+                    !empty($input->getArgument('mailTemplate'))? $input->getArgument('mailTemplate'):'Notifications'
+                );
+            }
         }
 
         return Command::SUCCESS;

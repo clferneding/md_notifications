@@ -207,4 +207,42 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $result;
     }
+
+    /**
+     * Get all users which have notifications in selected Storage Pids.
+     * Number of notifications is added in field `notificationItems`
+     *
+     * @param int $feuserUid
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function getUserNotifications(int $feuserUid, string $feuserGroup): array
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable(static::TABLE_NAME);
+
+		$orWhere = [
+				$queryBuilder->expr()->eq('usergroup', $queryBuilder->createNamedParameter($feuserGroup, Connection::PARAM_STR)),
+				$queryBuilder->expr()->like('usergroup', $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($feuserGroup.',') . '%')),
+				$queryBuilder->expr()->like('usergroup', $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards(','.$feuserGroup) )),
+		];
+        $andWhere = [
+            $queryBuilder->expr()->eq('feuser', $queryBuilder->createNamedParameter($feuserUid, Connection::PARAM_INT))
+        ];
+        $queryBuilder = $queryBuilder->select('record_key','record_id','record_date')
+            ->from(static::TABLE_NAME, 'notifications')
+            ->innerJoin(
+                'notifications',
+                'fe_users',
+                'u',
+                $queryBuilder->expr()->eq('u.uid', 'notifications.feuser')
+            );
+		$queryBuilder->orWhere(...$orWhere);
+		$queryBuilder->andWhere(...$andWhere);
+
+        $result = $queryBuilder->executeQuery()
+            ->fetchAllAssociative();
+
+        return $result;
+    }
 }
