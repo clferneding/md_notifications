@@ -69,7 +69,7 @@ class ReminderCommand extends Command
         $listPageUri = $this->getPageUri((int)$input->getArgument('listPageUid'));
         foreach ($users as $user) {
             if ($user['email']<>'') {
-                $notifications = $this->notificationRepository->getUserNotifications($user['uid'], '1');
+                $notifications = $this->notificationRepository->getUserNotifications($user['uid']);
                 MailService::sendMail(
                     $user['email'],
                     $input->getArgument('mailSubject'),

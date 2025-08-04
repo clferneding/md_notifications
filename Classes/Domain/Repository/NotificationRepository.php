@@ -216,16 +216,11 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @return array
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getUserNotifications(int $feuserUid, string $feuserGroup): array
+    public function getUserNotifications(int $feuserUid): array
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(static::TABLE_NAME);
 
-		$orWhere = [
-				$queryBuilder->expr()->eq('usergroup', $queryBuilder->createNamedParameter($feuserGroup, Connection::PARAM_STR)),
-				$queryBuilder->expr()->like('usergroup', $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($feuserGroup.',') . '%')),
-				$queryBuilder->expr()->like('usergroup', $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards(','.$feuserGroup) )),
-		];
         $andWhere = [
             $queryBuilder->expr()->eq('feuser', $queryBuilder->createNamedParameter($feuserUid, Connection::PARAM_INT))
         ];
@@ -236,9 +231,10 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'fe_users',
                 'u',
                 $queryBuilder->expr()->eq('u.uid', 'notifications.feuser')
-            );
-		$queryBuilder->orWhere(...$orWhere);
-		$queryBuilder->andWhere(...$andWhere);
+            )
+            ->where (
+                $queryBuilder->expr()->eq('notifications.feuser', $queryBuilder->createNamedParameter($feuserUid, Connection::PARAM_INT))
+        );
 
         $result = $queryBuilder->executeQuery()
             ->fetchAllAssociative();
