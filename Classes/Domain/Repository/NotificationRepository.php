@@ -209,8 +209,7 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     /**
-     * Get all users which have notifications in selected Storage Pids.
-     * Number of notifications is added in field `notificationItems`
+     * Get all users and notifications which have notifications in selected Storage Pids.
      *
      * @param int $feuserUid
      * @return array
@@ -222,9 +221,6 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(static::TABLE_NAME);
 
-        $andWhere = [
-            $queryBuilder->expr()->eq('feuser', $queryBuilder->createNamedParameter($feuserUid, Connection::PARAM_INT))
-        ];
         $queryBuilder = $queryBuilder->select('record_key','record_id','record_date','data')
             ->from(static::TABLE_NAME, 'notifications')
             ->innerJoin(
@@ -250,6 +246,59 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'title'         => isset($arrData['title']) ? $arrData['title'] : $r['record_id'],
                 'slug'          => isset($arrData['slug']) ? $arrData['slug'] : $r['record_id'],
                 'path_segment'  => isset($arrData['path_segment']) ? $arrData['path_segment'] : $r['record_id']
+            ];
+        }
+
+        return $resultArray;
+    }
+
+    /**
+     * Get all users and notifications which have the one top-notification.
+     *
+     * @param array $record[key,id]
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function getUsersWithTopNotification(string $record_key, int $record_id): array
+    {
+        $resultArray = [];
+        if ($record_key==''|| $record_id<=0) {
+            return $resultArray;
+        }
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable(static::TABLE_NAME);
+
+        $queryBuilder = $queryBuilder->select('record_key','record_id','record_date','data','feuser','u.title','u.first_name','u.last_name','u.email')
+            ->from(static::TABLE_NAME, 'notifications')
+            ->innerJoin(
+                'notifications',
+                'fe_users',
+                'u',
+                $queryBuilder->expr()->eq('u.uid', 'notifications.feuser')
+            )
+            ->where (
+                $queryBuilder->expr()->eq('record_id', $queryBuilder->createNamedParameter($record_id, Connection::PARAM_INT)),
+                $queryBuilder->expr()->eq('record_key', $queryBuilder->createNamedParameter($record_key, Connection::PARAM_STR))
+            );
+            $result = $queryBuilder->executeQuery()
+            ->fetchAllAssociative();
+
+        //mit slug/path-segment und title anreichern
+        foreach ($result as $r) {
+            $arrData = json_decode($r['data'], true);
+            $resultArray[] = [
+                'record_key'    => $r['record_key'],
+                'record_id'     => $r['record_id'],
+                'record_date'   => $r['record_date'],
+                'feuser'        => $r['feuser'],
+                'title'         => $r['title'],
+                'first_name'    => $r['first_name'],
+                'last_name'     => $r['last_name'],
+                'email'         => $r['email'],
+                'notification_title'         => isset($arrData['title']) ? $arrData['title'] : $r['record_id'],
+                'notification_slug'          => isset($arrData['slug']) ? $arrData['slug'] : $r['record_id'],
+                'notification_path_segment'  => isset($arrData['path_segment']) ? $arrData['path_segment'] : $r['record_id']
             ];
         }
 
