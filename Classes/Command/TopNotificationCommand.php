@@ -66,7 +66,6 @@ class TopNotificationCommand extends Command
         $record_key = $input->getArgument('toprecordkey');
         $record_id = (int)$input->getArgument('toprecordid');
         $users = $this->notificationRepository->getUsersWithTopNotification($record_key, $record_id);
-        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($users);
         foreach ($users as $user) {
             if ($user['email']<>'') {
 
