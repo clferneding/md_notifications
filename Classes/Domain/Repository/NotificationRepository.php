@@ -186,7 +186,13 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable(static::TABLE_NAME);
 
-        $queryBuilder = $queryBuilder->addSelectLiteral('COUNT(notifications.uid) AS notificationItems', 'u.*')
+        $queryBuilder = $queryBuilder->select(
+                'notifications.record_key',
+                'notifications.record_id',
+                'notifications.record_date',
+                'notifications.data',
+                'u.*'
+            )
             ->from(static::TABLE_NAME, 'notifications')
             ->leftJoin(
                 'notifications',
@@ -199,11 +205,21 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     'notifications.pid',
                     $queryBuilder->createNamedParameter($storageIds, ArrayParameterType::INTEGER)
                 )
-            )
-            ->groupBy('notifications.feuser');
+            );
 
-        $result = $queryBuilder->executeQuery()
+        $dbResult = $queryBuilder->executeQuery()
             ->fetchAllAssociative();
+
+        $result = [];
+        foreach ($dbResult as $item) {
+            $result[$item['uid']]['user'] = $item;
+            $result[$item['uid']]['notification_records'][] = [
+                'record_key' => $item['record_key'],
+                'record_id' => $item['record_id'],
+                'record_date' => $item['record_date'],
+                'record_data' => json_decode($item['data'], true),
+            ];
+        }
 
         return $result;
     }

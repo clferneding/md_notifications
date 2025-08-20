@@ -3,6 +3,11 @@
 <f:section name="Main">
     <p>Dear {first_name} {last_name},</p>
     <p>don't miss the updates, you have {notificationItems} unread items.</p>
+    <ul>
+        <f:for each="{notificationData}" as="item">
+            <li>{item.record_data.title}</li>
+        </f:for>
+    </ul>
     <p><a href="{listPageUri}">Come and see</a>.</p>
     <p>Enjoy your day.</p>
 </f:section>
