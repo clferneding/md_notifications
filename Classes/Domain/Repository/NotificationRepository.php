@@ -244,6 +244,7 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'record_date'   => $r['record_date'],
                 'feuser'        => $feuserUid,
                 'title'         => isset($arrData['title']) ? $arrData['title'] : $r['record_id'],
+                'pid'           => isset($arrData['pid']) ? $arrData['pid'] : 0,
                 'slug'          => isset($arrData['slug']) ? $arrData['slug'] : $r['record_id'],
                 'path_segment'  => isset($arrData['path_segment']) ? $arrData['path_segment'] : $r['record_id']
             ];
@@ -297,6 +298,7 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 'last_name'     => $r['last_name'],
                 'email'         => $r['email'],
                 'notification_title'         => isset($arrData['title']) ? $arrData['title'] : $r['record_id'],
+                'notification_pid'           => isset($arrData['pid']) ? $arrData['pid'] : 0,
                 'notification_slug'          => isset($arrData['slug']) ? $arrData['slug'] : $r['record_id'],
                 'notification_path_segment'  => isset($arrData['path_segment']) ? $arrData['path_segment'] : $r['record_id']
             ];
