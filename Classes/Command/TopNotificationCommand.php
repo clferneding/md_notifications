@@ -66,13 +66,16 @@ class TopNotificationCommand extends Command
         $record_key = $input->getArgument('toprecordkey');
         $record_id = (int)$input->getArgument('toprecordid');
         $users = $this->notificationRepository->getUsersWithTopNotification($record_key, $record_id);
-        foreach ($users as $user) {
-            if ($user['email']<>'') {
-
+        foreach ($users as $data) {
+            if (GeneralUtility::validEmail($data['user']['email']) === true) {
                 MailService::sendMail(
-                    $user['email'],
+                    $data['user']['email'],
                     $input->getArgument('mailSubject'),
-                    $user,
+                    array_merge(
+                        $data['user'],
+                        ['notificationItems' => count($data['notification_records'])],
+                        ['notificationData' => $data['notification_records']]
+                    ),
                     !empty($input->getArgument('mailTemplate'))? $input->getArgument('mailTemplate'):'TopNotification'
                 );
             }

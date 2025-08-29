@@ -1,8 +1,24 @@
 <f:layout name="SystemEmail" />
 <f:section name="Title">{headline}</f:section>
 <f:section name="Main">
-    <f:debug>{_all}</f:debug>
+    <f:switch expression="{notification.record_key}">
+        <f:case value="tx_news_domain_model_news">
+                <f:variable name="vnotification_link">https://mysite/news/detail/{notification.record_data.path_segment}</f:variable>
+            </f:switch>
+        </f:case>
+        <f:case value="pages">
+            <f:variable name="vnotification_link">https://mysite{notification.record_data.slug}</f:variable>
+        </f:case>
+        <f:defaultCase>
+            <f:variable name="vnotification_link">https://mysite/</f:variable>
+        </f:defaultCase>
+    </f:switch>
     <p>Dear {first_name} {last_name},</p>
-    <p>don't miss the news {notification_title} </p>
+    <p>don't miss this topinfo.</p>
+    <f:for each="{notificationData}" as="notification">
+    <f:link.typolink parameter="{vnotification_link}">
+        <strong>{notification.record_data.title}</strong>
+    </f:link.typolink> 
+    </f:for>
     <p>Enjoy your day.</p>
 </f:section>
