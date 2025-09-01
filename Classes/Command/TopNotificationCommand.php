@@ -43,6 +43,10 @@ class TopNotificationCommand extends Command
         $this
             ->setHelp('This command will send emails about one open (top-)notification')
             ->addArgument(
+                'mailTemplate',
+                InputArgument::REQUIRED,
+                'Add the name of the HTML file, which is used for the e-mail.'
+            )->addArgument(
                 'toprecordkey',
                 InputArgument::REQUIRED,
                 'Tablename of the top-notification. tx_news_domain_model_news/pages'
@@ -52,25 +56,25 @@ class TopNotificationCommand extends Command
                 'Uid of the top-notification.'
             )->addArgument(
                 'mailSubject',
-                InputArgument::REQUIRED,
-                'The subject of the email.'
-            )->addArgument(
-                'mailTemplate',
-                InputArgument::REQUIRED,
-                'Add the name of the HTML file, which is used for the e-mail.'
+                InputArgument::OPTIONAL,
+                'The subject of the email. If empty: title of news/page'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $subject = $input->getArgument('mailSubject');
         $record_key = $input->getArgument('toprecordkey');
         $record_id = (int)$input->getArgument('toprecordid');
         $users = $this->notificationRepository->getUsersWithTopNotification($record_key, $record_id);
         foreach ($users as $data) {
             if (GeneralUtility::validEmail($data['user']['email']) === true) {
+                if ($subject == '') {
+                    $subject = isset($data['notification_records'][0]['record_data']['title']) ? $data['notification_records'][0]['record_data']['title'] : 'neue Mitteilung';
+                }
                 MailService::sendMail(
                     $data['user']['email'],
-                    $input->getArgument('mailSubject'),
+                    $subject,
                     array_merge(
                         $data['user'],
                         ['notificationItems' => count($data['notification_records'])],
