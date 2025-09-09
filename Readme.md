@@ -131,6 +131,7 @@ Setup scheduler task:
 Hint:<br>
 You can setup individual tasks for individual notification types. Therefor
 add more than one `mdNotifications:reminder`-tasks and configure individually.
+-> topnotification
 
 #### E-Mail template
 In order to change the E-Mail template, add the path to your site extension in
@@ -161,3 +162,25 @@ The TYPO3 project - inspiring people to share!
 
 ## Credits
 - Extension icon was kindly taken from [Font Awesome](https://fontawesome.com/icons/bell?f=classic&s=solid).
+
+## Modifications/Extensions
+### Send push emails for Top-News/-Blog
+You can send push emails about one special notification.
+Therefor you will find a scheduler task called `mdNotifications:topnotification`.
+
+Setup scheduler task:
+
+* Go to `Scheduler`
+* Click `New task`
+* Select `Execute console commands` in the `Task`-dropdown
+* Select `mdNotifications:topnotification` in the dropdown `Schedulable Command`
+* Press the `Save` button
+* Add value for `toprecordkey`. This is the table-name of the top-news
+* Add value for `toprecordid`. This is the Uid of the top-news/page.
+* Add value `mailTemplate`. With this option, your are able to set
+  a templates for the task. Enter the name of the HTML file, which shall be
+  used for the e-mail.
+* Add optional value for `mailSubject`. The is the subject of the email, which will be sent. If empty, it's the title.
+* Press the Save button again
+
+### Action alle news/pages 'mark as read'
