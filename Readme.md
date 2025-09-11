@@ -163,7 +163,7 @@ The TYPO3 project - inspiring people to share!
 ## Credits
 - Extension icon was kindly taken from [Font Awesome](https://fontawesome.com/icons/bell?f=classic&s=solid).
 
-## Modifications/Extensions
+## Expansions
 ### Send push emails for Top-News/-Blog
 You can send push emails about one special notification.
 Therefor you will find a scheduler task called `mdNotifications:topnotification`.
@@ -183,9 +183,9 @@ Setup scheduler task:
 * Add optional value for `mailSubject`. The is the subject of the email, which will be sent. If empty, it's the title.
 * Press the Save button again
 
-### Action alle news/pages 'mark as read' (feuser) 
-- danach Weiterleitung nach Notification.listAction
+### Action delete all news/pages - 'mark all as read' (for feuser) 
+- after deletion redirect to Notification.listAction
 Example
     <f:if condition="{notifications}">
-        <f:link.action action="deleteAllItems" arguments="{recordKey:notifications.0.recordKey,feuser:notifications.0.feuser}" extensionName="mdNotifications">{f:translate(key: 'Mark-all-as-read', extensionName: 'AktSitepackageLegintranet')}</f:link.action>
+        <f:link.action action="deleteAllItems" arguments="{recordKey:notifications.0.recordKey,feuser:notifications.0.feuser}" extensionName="mdNotifications">mark-all-as-read</f:link.action>
     </f:if>
