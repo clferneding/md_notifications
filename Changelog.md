@@ -1,5 +1,6 @@
 # Version 1.0.3 (2025-09-09) - fork https://github.com/clferneding/md_notifications
 - [FEATURE] topnotification - send push-emails for one top-news
+- [FEATURE] Notification.deleteAllItemsAction - mark all as read (of feuser and recordKey)
 
 # Version 1.0.3 (2025-08-20)
 - [FEATURE] add record data to reminder email

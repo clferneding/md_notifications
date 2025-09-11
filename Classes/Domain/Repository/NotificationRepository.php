@@ -275,4 +275,25 @@ class NotificationRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 
         return $result;
     }
+
+    /**
+     * Delete entries for given feuser
+     *
+     * @param int $feuser
+     * @return void
+     */
+    public function deleteEntriesByFeuser(string $recordKey, int $feuser): void
+    {
+        if ($feuser>0 && $recordKey <> '') {
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+                ->getConnectionForTable(static::TABLE_NAME);
+
+            $arrayWhere = [
+                'feuser' => $feuser,
+                'record_key' => $recordKey,
+            ];
+
+            $queryBuilder->delete(static::TABLE_NAME, $arrayWhere);
+        }
+    }
 }

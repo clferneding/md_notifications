@@ -113,4 +113,15 @@ class NotificationController extends AbstractController
             ->withHeader('Content-Type', 'text/html; charset=utf-8')
             ->withBody($this->streamFactory->createStream(''));
     }
+
+    /**
+     * Delete items 
+     */
+    public function deleteAllItemsAction(string $recordKey, int $feuser): ResponseInterface
+    {
+        if ($feuser>0 && $recordKey <> '') {
+            $this->notificationRepository->deleteEntriesByFeuser($recordKey,$feuser);
+        }
+        return $this->redirect('list');
+    }
 }

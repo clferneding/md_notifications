@@ -32,7 +32,7 @@ use TYPO3\CMS\Scheduler\Task\TableGarbageCollectionTask;
         'MdNotifications',
         'Notifications',
         [
-            NotificationController::class => 'list'
+            NotificationController::class => 'list,deleteAllItems'
         ],
         [
             NotificationController::class => 'list'

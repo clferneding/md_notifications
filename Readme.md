@@ -183,4 +183,9 @@ Setup scheduler task:
 * Add optional value for `mailSubject`. The is the subject of the email, which will be sent. If empty, it's the title.
 * Press the Save button again
 
-### Action alle news/pages 'mark as read'
+### Action alle news/pages 'mark as read' (feuser) 
+- danach Weiterleitung nach Notification.listAction
+Example
+    <f:if condition="{notifications}">
+        <f:link.action action="deleteAllItems" arguments="{recordKey:notifications.0.recordKey,feuser:notifications.0.feuser}" extensionName="mdNotifications">{f:translate(key: 'Mark-all-as-read', extensionName: 'AktSitepackageLegintranet')}</f:link.action>
+    </f:if>
