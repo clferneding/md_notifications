@@ -184,8 +184,11 @@ Setup scheduler task:
 * Press the Save button again
 
 ### Action delete all news/pages - 'mark all as read' (for feuser) 
+- delete all notifications for record_key and feuser
 - after deletion redirect to Notification.listAction
-Example
+- Example:
+```
     <f:if condition="{notifications}">
         <f:link.action action="deleteAllItems" arguments="{recordKey:notifications.0.recordKey,feuser:notifications.0.feuser}" extensionName="mdNotifications">mark-all-as-read</f:link.action>
     </f:if>
+```
