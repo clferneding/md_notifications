@@ -160,8 +160,8 @@ class TCEmainHook
                     'tstamp'        => $timestamp,
                     'crdate'        => $timestamp,
                     'hidden'        => $fieldArray['hidden'],
-                    'starttime'     => $fieldArray['starttime'],
-                    'endtime'       => $fieldArray['endtime'],
+                    'starttime'     => $fieldArray['starttime'] ?? 0,
+                    'endtime'       => $fieldArray['endtime'] ?? 0,
                 ];
             }
 
