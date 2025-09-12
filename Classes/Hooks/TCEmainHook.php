@@ -150,7 +150,6 @@ class TCEmainHook
             // prepare data to save
             $timestamp = time();
             foreach ($feuserData as $data) {
-                $endtime=isset($fieldArray['endtime'])?$fieldArray['endtime']:0;
                 $dataArray[] = [
                     'pid'           => $siteConfig['md_notifications']['storagePid'] ?? 0,
                     'record_key'    => $recordKey,
@@ -161,8 +160,8 @@ class TCEmainHook
                     'tstamp'        => $timestamp,
                     'crdate'        => $timestamp,
                     'hidden'        => $fieldArray['hidden'],
-                    'starttime'     => $fieldArray['starttime'],
-                    'endtime'       => $endtime,
+                    'starttime'     => $fieldArray['starttime'] ?? 0,
+                    'endtime'       => $fieldArray['endtime'] ?? 0,
                 ];
             }
 

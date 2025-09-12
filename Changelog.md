@@ -1,3 +1,6 @@
+# Version 1.0.4 (2025-09-12)
+- [TASK] double check for existence of field `starttime` and `endtime` in `TCEmainHook`
+
 # Version 1.0.3 (2025-09-09) - fork https://github.com/clferneding/md_notifications
 - [FEATURE] topnotification - send push-emails for one top-news
 - [FEATURE] Notification.deleteAllItemsAction - mark all as read (of feuser and recordKey)
