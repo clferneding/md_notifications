@@ -1,3 +1,9 @@
+# Version 1.0.4 (2025-09-12)
+- [TASK] double check for existence of field `starttime` and `endtime` in `TCEmainHook`
+
+All changes
+https://github.com/cdaecke/md_notifications/compare/v1.0.3...v1.0.4
+
 # Version 1.0.3 (2025-08-20)
 - [FEATURE] add record data to reminder email
 
